@@ -1,0 +1,62 @@
+﻿@model AgnosticAlbatros.ViewModels.StoreViewModel
+
+@using AgnosticAlbatros.Services
+@inject AgnosticAlbatros.Services.IUserService userService
+
+
+<div id="clients-content" class="content-container">
+    <div class="top-content">
+
+    </div>
+    <div class="scrollable-content">
+        <h2>Stores</h2>
+        <hr />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        City
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Stores == null || Model.Stores.Count() == 0)
+                {
+                    <tr>
+                        <td>No Stores To Show</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Stores)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.Cities.Single(x => x.ID == item.CityID).Name)
+                            </td>
+                            <td>
+                                <a asp-action="Detail" asp-route-id="@item.ID">Details</a>
+
+                                @if (userService.User.Admin)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="bottom-content">
+        <a asp-action="Create">Create New</a>
+    </div>
+</div>

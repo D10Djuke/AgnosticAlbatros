@@ -1,0 +1,105 @@
+﻿@model AgnosticAlbatros.Models.Api.UserData
+
+<div id="users-create" class="content-container">
+    <h2>New User</h2>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tel1" class="control-label"></label>
+                    <input asp-for="Tel1" class="form-control" />
+                    <span asp-validation-for="Tel1" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Tel2" class="control-label"></label>
+                    <input asp-for="Tel2" class="form-control" />
+                    <span asp-validation-for="Tel2" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="KitchenID" class="control-label">Kitchen</label>
+                    <select asp-for="KitchenID">
+                        @foreach (var item in Model.Kitchens)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </select>
+                    <button class="btn btn-default" type="button" onclick="toggleNewKitchen()">New</button>
+                </div>
+                <section id="newKitchen" hidden>
+                    <div class="form-group" >
+                        <label asp-for="NewKitchenName" class="control-label">Name</label>
+                        <input asp-for="NewKitchenName" class="form-control" />
+                        <span asp-validation-for="NewKitchenName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NewKitchenDescription" class="control-label">Description</label>
+                        <input asp-for="NewKitchenDescription" class="form-control" />
+                        <span asp-validation-for="NewKitchenDescription" class="text-danger"></span>
+                    </div>
+                    <input type="submit" value="Add" class="btn btn-default" />
+                </section>
+                <div class="form-group">
+                    <label asp-for="UserTitleID" class="control-label">Title</label>
+                    <select asp-for="UserTitleID">
+                        @foreach (var item in Model.UserTitles)
+                        {
+                            <option value="@item.ID">@item.Title</option>
+                        }
+                    </select>
+                    <button class="btn btn-default" type="button" onclick="toggleNewUserTitle()">New</button>
+                </div>
+                <section id="newUserTitle" hidden>
+                    <div class="form-group">
+                        <label asp-for="NewUserTitle" class="control-label">Title</label>
+                        <input asp-for="NewUserTitle" class="form-control" />
+                        <span asp-validation-for="NewUserTitle" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="NewUserTitleDescription" class="control-label">Description</label>
+                        <input asp-for="NewUserTitleDescription" class="form-control" />
+                        <span asp-validation-for="NewUserTitleDescription" class="text-danger"></span>
+                    </div>
+                    <input type="submit" value="Add" class="btn btn-default" />
+                </section>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>
+
+<script>
+    function toggleNewKitchen() {
+        $("#newKitchen").removeAttr('hidden');
+    }
+    function toggleNewUserTitle() {
+        $("#newUserTitle").removeAttr('hidden');
+    }
+</script>

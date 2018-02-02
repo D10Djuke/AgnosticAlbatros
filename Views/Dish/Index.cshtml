@@ -1,0 +1,61 @@
+﻿@model AgnosticAlbatros.ViewModels.DishViewModel
+@using AgnosticAlbatros.Services
+@inject AgnosticAlbatros.Services.IUserService userService
+
+<div id="company-content" class="content-container">
+    <div class="top-content">
+
+    </div>
+    <div class="scrollable-content">
+        <h2>City</h2>
+        <hr/>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Price Per Person
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Dishes == null || Model.Dishes.Count() == 0)
+                {
+                    <tr>
+                        <td>No Components To Show</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Dishes)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PricePerPerson)
+                            </td>
+                            <td>
+                                <a asp-action="Detail" asp-route-id="@item.ID">Details</a>
+                                <a asp-action="Coupling" asp-route-id="@item.ID">Couple</a>
+
+                                @if (userService.User.Admin)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>        
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="bottom-content">
+        <a asp-action="Create">Create New</a>
+    </div>
+</div>

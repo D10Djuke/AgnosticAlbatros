@@ -1,0 +1,61 @@
+﻿@model AgnosticAlbatros.ViewModels.IngredientsViewModel
+@using AgnosticAlbatros.Services
+@inject AgnosticAlbatros.Services.IUserService userService
+
+
+
+<div id="company-content" class="content-container">
+    <div class="top-content">
+
+    </div>
+    <div class="scrollable-content">
+        <h2>Ingredients</h2>
+        <hr/>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Store
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Ingredients == null || Model.Ingredients.Count() == 0)
+                {
+                    <tr>
+                        <td>No Ingredients To Show</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Ingredients)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.Stores.First(x => x.ID == item.StoreID).Name)
+                            </td>
+                            <td>
+                                <a asp-action="Detail" asp-route-id="@item.ID">Details</a>
+
+                                @if (userService.User.Admin)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>        
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="bottom-content">
+        <a asp-action="Create">Create New</a>
+    </div>
+</div>

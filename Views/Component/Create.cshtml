@@ -1,0 +1,52 @@
+﻿@model AgnosticAlbatros.Models.Api.ComponentData
+@using AgnosticAlbatros.Services
+@inject AgnosticAlbatros.Services.IUserService userService
+
+<div id="users-create" class="content-container">
+    <h2>New Ingredient</h2>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div class="form-group">
+                    <label asp-for="Component.Name" class="control-label"></label>
+                    <input asp-for="Component.Name" class="form-control" />
+                    <span asp-validation-for="Component.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Component.Description" class="control-label"></label>
+                    <input asp-for="Component.Description" class="form-control" />
+                    <span asp-validation-for="Component.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Component.Preparation" class="control-label"></label>
+                    <input asp-for="Component.Preparation" class="form-control" />
+                    <span asp-validation-for="Component.Preparation" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Component.PricePerPerson" class="control-label"></label>
+                    <input asp-for="Component.PricePerPerson" class="form-control" />
+                    <span asp-validation-for="Component.PricePerPerson" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Component.Notes" class="control-label"></label>
+                    <input asp-for="Component.Notes" class="form-control" />
+                    <span asp-validation-for="Component.Notes" class="text-danger"></span>
+                </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>

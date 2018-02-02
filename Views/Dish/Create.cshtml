@@ -1,0 +1,63 @@
+﻿@model AgnosticAlbatros.Models.Api.DishData
+@using AgnosticAlbatros.Services
+@inject AgnosticAlbatros.Services.IUserService userService
+
+<div id="users-create" class="content-container">
+    <h2>New Ingredient</h2>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div class="form-group">
+                    <label asp-for="Dish.Name" class="control-label"></label>
+                    <input asp-for="Dish.Name" class="form-control" />
+                    <span asp-validation-for="Dish.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dish.Description" class="control-label"></label>
+                    <input asp-for="Dish.Description" class="form-control" />
+                    <span asp-validation-for="Dish.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dish.Preparation" class="control-label"></label>
+                    <input asp-for="Dish.Preparation" class="form-control" />
+                    <span asp-validation-for="Dish.Preparation" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dish.PricePerPerson" class="control-label"></label>
+                    <input asp-for="Dish.PricePerPerson" class="form-control" />
+                    <span asp-validation-for="Dish.PricePerPerson" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dish.Notes" class="control-label"></label>
+                    <input asp-for="Dish.Notes" class="form-control" />
+                    <span asp-validation-for="Dish.Notes" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dish.KitchenID" class="control-label">City</label>
+                    <select asp-for="Dish.KitchenID">
+                        @foreach (var item in Model.Kitchens)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </select>
+
+                </div>
+                
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>

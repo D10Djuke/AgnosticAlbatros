@@ -1,0 +1,73 @@
+﻿@model AgnosticAlbatros.ViewModels.UsersViewModel
+
+<div id="users-content" class="content-container">
+    <div class="top-content">
+
+    </div>
+    <div class="scrollable-content">
+        <h2>Users</h2>
+        <hr />
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.LastName)</a>
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserTitle)
+                    </th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]">@Html.DisplayNameFor(model => model.LastSeenDate)</a>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Users == null || Model.Users.Count() == 0)
+                {
+                    <tr>
+                        <td>No Users To Show</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Users)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FirstName)
+                            </td>
+                            @{
+                                var v = Model.UserTitles.Where(x => x.ID == item.UserTitleID).Select(x => x.Title);
+                            }
+                            <td>
+                                @Html.DisplayFor(modelItem => v)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastSeen)
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.ID">Details</a> 
+
+                                @if (!item.Admin)
+                                {
+                                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                }
+                            </td>
+                        </tr>
+                                }
+                                }
+            </tbody>
+        </table>
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="bottom-content">
+        <a asp-action="Create">Create New</a>
+    </div>
+</div>

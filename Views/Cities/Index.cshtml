@@ -1,0 +1,65 @@
+﻿@model AgnosticAlbatros.ViewModels.CitiesViewModel
+@using AgnosticAlbatros.Services
+@inject AgnosticAlbatros.Services.IUserService userService
+
+<div id="company-content" class="content-container">
+    <div class="top-content">
+
+    </div>
+    <div class="scrollable-content">
+        <h2>City</h2>
+        <hr/>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        ZipCode
+                    </th>
+                    <th>
+                        Country
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Cities == null || Model.Cities.Count() == 0)
+                {
+                    <tr>
+                        <td>No Kitchens To Show</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var item in Model.Cities)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ZipCode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => Model.Countries.First(x => x.ID == item.CountryID).Name)
+                            </td>
+                            <td>
+                                <a asp-action="Detail" asp-route-id="@item.ID">Details</a>
+
+                                @if (userService.User.Admin)
+                                {
+                                    <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>        
+    </div>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="bottom-content">
+        <a asp-action="Create">Create New</a>
+    </div>
+</div>

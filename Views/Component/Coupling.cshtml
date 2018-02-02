@@ -1,0 +1,56 @@
+﻿@model AgnosticAlbatros.Models.Api.DishComponentIngredientData
+
+<div id="users-create" class="content-container">
+    <h2>Create Coupling</h2>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="CreateCoupling">
+                <div class="form-group" hidden>
+                    <label asp-for="Coupling.DichComponentID" class="control-label"></label>
+                    <input asp-for="Coupling.DichComponentID" class="form-control" value="@Model.DishComponent.ID" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Coupling.Amount" class="control-label"></label>
+                    <input asp-for="Coupling.Amount" class="form-control" />
+                    <span asp-validation-for="Coupling.Amount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Coupling.Price" class="control-label"></label>
+                    <input asp-for="Coupling.Price" class="form-control" />
+                    <span asp-validation-for="Coupling.Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Coupling.Notes" class="control-label"></label>
+                    <input asp-for="Coupling.Notes" class="form-control" />
+                    <span asp-validation-for="Coupling.Notes" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Coupling.IngredientID" class="control-label">Ingredient</label>
+                    <select asp-for="Coupling.IngredientID">
+                        @foreach (var item in Model.Ingredients)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </select>
+                </div>
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>

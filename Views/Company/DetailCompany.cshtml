@@ -1,0 +1,76 @@
+﻿@model AgnosticAlbatros.Models.Api.CompanyData
+<div id="users-create" class="content-container">
+    <h2>Company Detail</h2>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="UpdateCompany">
+                <div hidden>
+                    <label asp-for="Company.ID" class="control-label"></label>
+                    <input asp-for="Company.ID" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Company.Name" class="control-label"></label>
+                    <input asp-for="Company.Name" class="form-control" />
+                    <span asp-validation-for="Company.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Company.VAT" class="control-label"></label>
+                    <input asp-for="Company.VAT" class="form-control" />
+                    <span asp-validation-for="Company.VAT" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Company.AddressStreet" class="control-label"></label>
+                    <input asp-for="Company.AddressStreet" class="form-control" />
+                    <span asp-validation-for="Company.AddressStreet" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Company.AddressNumber" class="control-label"></label>
+                    <input asp-for="Company.AddressNumber" class="form-control" />
+                    <span asp-validation-for="Company.AddressNumber" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Company.CityID" class="control-label">Kitchen</label>
+                    <select id="citySelect" asp-for="Company.CityID">
+                        @foreach (var item in Model.Cities)
+                        {
+                            @if (Model.Company.CityID == item.ID)
+                            {
+                                <option value="@item.ID" selected>@item.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@item.ID">@item.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Company.Tel1" class="control-label"></label>
+                    <input asp-for="Company.Tel1" class="form-control" />
+                    <span asp-validation-for="Company.Tel1" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Company.Tel2" class="control-label"></label>
+                    <input asp-for="Company.Tel2" class="form-control" />
+                    <span asp-validation-for="Company.Tel2" class="text-danger"></span>
+                </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <input type="submit" value="Update" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>

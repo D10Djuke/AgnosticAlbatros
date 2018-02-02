@@ -1,0 +1,55 @@
+﻿@model AgnosticAlbatros.Models.Api.IngredientsData
+
+<div id="users-create" class="content-container">
+    <h2>Update City</h2>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Update">
+                <div hidden>
+                    <label asp-for="Ingredient.ID" class="control-label"></label>
+                    <input asp-for="Ingredient.ID" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ingredient.Name" class="control-label"></label>
+                    <input asp-for="Ingredient.Name" class="form-control" />
+                    <span asp-validation-for="Ingredient.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ingredient.Description" class="control-label"></label>
+                    <input asp-for="Ingredient.Description" class="form-control" />
+                    <span asp-validation-for="Ingredient.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ingredient.Notes" class="control-label"></label>
+                    <input asp-for="Ingredient.Notes" class="form-control" />
+                    <span asp-validation-for="Ingredient.Notes" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Ingredient.StoreID" class="control-label">Store</label>
+                    <select asp-for="Ingredient.StoreID">
+                        @foreach (var item in Model.Stores)
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+                    </select>
+                </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <input type="submit" value="Update" class="btn btn-default" />
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</div>
