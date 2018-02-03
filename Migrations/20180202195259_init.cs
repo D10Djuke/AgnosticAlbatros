@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AgnosticAlbatros.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -77,24 +77,6 @@ namespace AgnosticAlbatros.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.ID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserTitles",
-                columns: table => new
-                {
-                    ID = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Archived = table.Column<bool>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    Description = table.Column<string>(nullable: true),
-                    Guid = table.Column<Guid>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserTitles", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,42 +158,6 @@ namespace AgnosticAlbatros.Migrations
                         name: "FK_Companies_Cities_CityID",
                         column: x => x.CityID,
                         principalTable: "Cities",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Quotes",
-                columns: table => new
-                {
-                    ID = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    AddressNumber = table.Column<string>(nullable: true),
-                    AddressStreet = table.Column<string>(nullable: true),
-                    CityID = table.Column<long>(nullable: false),
-                    CreatedAt = table.Column<DateTime>(nullable: false),
-                    DeliveryDate = table.Column<DateTime>(nullable: false),
-                    ExpirationDate = table.Column<DateTime>(nullable: false),
-                    GuestCount = table.Column<int>(nullable: false),
-                    Guid = table.Column<Guid>(nullable: false),
-                    Notes = table.Column<string>(nullable: true),
-                    OrderID = table.Column<long>(nullable: false),
-                    TotalPrice = table.Column<long>(nullable: false),
-                    UpdatedAt = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Quotes", x => x.ID);
-                    table.ForeignKey(
-                        name: "FK_Quotes_Cities_CityID",
-                        column: x => x.CityID,
-                        principalTable: "Cities",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Quotes_Orders_OrderID",
-                        column: x => x.OrderID,
-                        principalTable: "Orders",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -307,6 +253,38 @@ namespace AgnosticAlbatros.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserTitles",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Archived = table.Column<bool>(nullable: false),
+                    CompanyId = table.Column<long>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    Description = table.Column<string>(nullable: true),
+                    Guid = table.Column<Guid>(nullable: false),
+                    Title = table.Column<string>(nullable: true),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
+                    UserTitleID = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTitles", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_UserTitles_Companies_CompanyId",
+                        column: x => x.CompanyId,
+                        principalTable: "Companies",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_UserTitles_UserTitles_UserTitleID",
+                        column: x => x.UserTitleID,
+                        principalTable: "UserTitles",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Ingredients",
                 columns: table => new
                 {
@@ -328,6 +306,49 @@ namespace AgnosticAlbatros.Migrations
                         name: "FK_Ingredients_Stores_StoreID",
                         column: x => x.StoreID,
                         principalTable: "Stores",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Quotes",
+                columns: table => new
+                {
+                    ID = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    AddressNumber = table.Column<string>(nullable: true),
+                    AddressStreet = table.Column<string>(nullable: true),
+                    CityID = table.Column<long>(nullable: false),
+                    ClientID = table.Column<long>(nullable: false),
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    DeliveryDate = table.Column<DateTime>(nullable: false),
+                    ExpirationDate = table.Column<DateTime>(nullable: false),
+                    GuestCount = table.Column<int>(nullable: false),
+                    Guid = table.Column<Guid>(nullable: false),
+                    Notes = table.Column<string>(nullable: true),
+                    OrderID = table.Column<long>(nullable: false),
+                    TotalPrice = table.Column<long>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Quotes", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Quotes_Cities_CityID",
+                        column: x => x.CityID,
+                        principalTable: "Cities",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Quotes_Clients_ClientID",
+                        column: x => x.ClientID,
+                        principalTable: "Clients",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_Quotes_Orders_OrderID",
+                        column: x => x.OrderID,
+                        principalTable: "Orders",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.NoAction);
                 });
@@ -366,14 +387,17 @@ namespace AgnosticAlbatros.Migrations
                 {
                     ID = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Admin = table.Column<bool>(nullable: false),
                     Archived = table.Column<bool>(nullable: false),
                     CompanyID = table.Column<long>(nullable: false),
                     CreatedAt = table.Column<DateTime>(nullable: false),
+                    Email = table.Column<string>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     Guid = table.Column<Guid>(nullable: false),
                     KitchenID = table.Column<long>(nullable: false),
                     LastName = table.Column<string>(nullable: true),
                     LastSeen = table.Column<DateTime>(nullable: false),
+                    PassWord = table.Column<string>(nullable: true),
                     Tel1 = table.Column<string>(nullable: true),
                     Tel2 = table.Column<string>(nullable: true),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
@@ -622,6 +646,11 @@ namespace AgnosticAlbatros.Migrations
                 column: "CityID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Quotes_ClientID",
+                table: "Quotes",
+                column: "ClientID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Quotes_OrderID",
                 table: "Quotes",
                 column: "OrderID");
@@ -645,15 +674,22 @@ namespace AgnosticAlbatros.Migrations
                 name: "IX_Users_UserTitleID",
                 table: "Users",
                 column: "UserTitleID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTitles_CompanyId",
+                table: "UserTitles",
+                column: "CompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTitles_UserTitleID",
+                table: "UserTitles",
+                column: "UserTitleID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "BuffetDishCouplings");
-
-            migrationBuilder.DropTable(
-                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "DishComponentCouplings");
@@ -684,6 +720,9 @@ namespace AgnosticAlbatros.Migrations
 
             migrationBuilder.DropTable(
                 name: "Dishes");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "Orders");

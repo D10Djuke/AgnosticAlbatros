@@ -11,8 +11,8 @@ using System;
 namespace AgnosticAlbatros.Migrations
 {
     [DbContext(typeof(DeliContext))]
-    [Migration("20171214025643_user_update")]
-    partial class user_update
+    [Migration("20180203161705_country_update2")]
+    partial class country_update2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,9 +172,17 @@ namespace AgnosticAlbatros.Migrations
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("Guid");
+                    b.Property<string>("ISO");
+
+                    b.Property<string>("ISO3");
 
                     b.Property<string>("Name");
+
+                    b.Property<string>("NiceName");
+
+                    b.Property<string>("NumCode");
+
+                    b.Property<string>("PhoneCode");
 
                     b.HasKey("ID");
 
@@ -446,6 +454,8 @@ namespace AgnosticAlbatros.Migrations
 
                     b.Property<long>("CityID");
 
+                    b.Property<long>("ClientID");
+
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<DateTime>("DeliveryDate");
@@ -467,6 +477,8 @@ namespace AgnosticAlbatros.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("CityID");
+
+                    b.HasIndex("ClientID");
 
                     b.HasIndex("OrderID");
 
@@ -511,6 +523,8 @@ namespace AgnosticAlbatros.Migrations
                 {
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<bool>("Admin");
 
                     b.Property<bool>("Archived");
 
@@ -703,6 +717,11 @@ namespace AgnosticAlbatros.Migrations
                     b.HasOne("AgnosticAlbatros.Models.City", "City")
                         .WithMany()
                         .HasForeignKey("CityID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AgnosticAlbatros.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientID")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AgnosticAlbatros.Models.Order", "Order")

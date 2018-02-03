@@ -11,8 +11,8 @@ using System;
 namespace AgnosticAlbatros.Migrations
 {
     [DbContext(typeof(DeliContext))]
-    [Migration("20171214183637_admin_field_add")]
-    partial class admin_field_add
+    [Migration("20180203154318_country_update")]
+    partial class country_update
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,9 +172,17 @@ namespace AgnosticAlbatros.Migrations
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("Guid");
+                    b.Property<string>("ISO");
+
+                    b.Property<string>("ISO3");
 
                     b.Property<string>("Name");
+
+                    b.Property<string>("NiceName");
+
+                    b.Property<int>("NumCode");
+
+                    b.Property<int>("PhoneCode");
 
                     b.HasKey("ID");
 

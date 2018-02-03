@@ -11,11 +11,8 @@ namespace AgnosticAlbatros.Models
     {
         [Key]
         public long ID { get; set; }
-
-        [Required]
-        public Guid Guid { get; set; }
-
         public string Name { get; set; }
+        public string ISOCode { get; set; }
         
         public virtual List<City> Cities { get; set; }
     }

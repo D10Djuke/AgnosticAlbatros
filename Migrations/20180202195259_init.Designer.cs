@@ -11,8 +11,8 @@ using System;
 namespace AgnosticAlbatros.Migrations
 {
     [DbContext(typeof(DeliContext))]
-    [Migration("20171213192306_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20180202195259_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -446,6 +446,8 @@ namespace AgnosticAlbatros.Migrations
 
                     b.Property<long>("CityID");
 
+                    b.Property<long>("ClientID");
+
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<DateTime>("DeliveryDate");
@@ -467,6 +469,8 @@ namespace AgnosticAlbatros.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("CityID");
+
+                    b.HasIndex("ClientID");
 
                     b.HasIndex("OrderID");
 
@@ -512,11 +516,15 @@ namespace AgnosticAlbatros.Migrations
                     b.Property<long>("ID")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<bool>("Admin");
+
                     b.Property<bool>("Archived");
 
                     b.Property<long>("CompanyID");
 
                     b.Property<DateTime>("CreatedAt");
+
+                    b.Property<string>("Email");
 
                     b.Property<string>("FirstName");
 
@@ -527,6 +535,8 @@ namespace AgnosticAlbatros.Migrations
                     b.Property<string>("LastName");
 
                     b.Property<DateTime>("LastSeen");
+
+                    b.Property<string>("PassWord");
 
                     b.Property<string>("Tel1");
 
@@ -554,6 +564,8 @@ namespace AgnosticAlbatros.Migrations
 
                     b.Property<bool>("Archived");
 
+                    b.Property<long>("CompanyId");
+
                     b.Property<DateTime>("CreatedAt");
 
                     b.Property<string>("Description");
@@ -564,7 +576,13 @@ namespace AgnosticAlbatros.Migrations
 
                     b.Property<DateTime>("UpdatedAt");
 
+                    b.Property<long?>("UserTitleID");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("UserTitleID");
 
                     b.ToTable("UserTitles");
                 });
@@ -693,6 +711,11 @@ namespace AgnosticAlbatros.Migrations
                         .HasForeignKey("CityID")
                         .OnDelete(DeleteBehavior.Cascade);
 
+                    b.HasOne("AgnosticAlbatros.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("AgnosticAlbatros.Models.Order", "Order")
                         .WithMany()
                         .HasForeignKey("OrderID")
@@ -723,6 +746,18 @@ namespace AgnosticAlbatros.Migrations
                         .WithMany("Users")
                         .HasForeignKey("UserTitleID")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AgnosticAlbatros.Models.UserTitle", b =>
+                {
+                    b.HasOne("AgnosticAlbatros.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("AgnosticAlbatros.Models.UserTitle")
+                        .WithMany("UserTitles")
+                        .HasForeignKey("UserTitleID");
                 });
 #pragma warning restore 612, 618
         }

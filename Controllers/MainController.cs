@@ -71,7 +71,7 @@ namespace AgnosticAlbatros.Controllers
             return View("Register", data);
         }
 
-        public async Task<IActionResult> Register([Bind("Email,PassWord,PassWordRepeat,FirstName,LastName,CompanyName,Country,ZipCode,City")]RegisterData data)
+        public async Task<IActionResult> Register([Bind("Email,FirstName,LastName,CompanyName,Country,ZipCode,City")]RegisterData data)
         {
             using (var dbContextTransaction = _db.Database.BeginTransaction())
             {
@@ -134,50 +134,54 @@ namespace AgnosticAlbatros.Controllers
 
                             User user = _db.Users.FirstOrDefault(x => x.Email == data.Email);
 
-                            if (user == null)
-                            {
-                                if ((data.PassWord).Equals(data.PassWordRepeat))
-                                {
-                                    user = new User()
-                                    {
-                                        Admin = true,
-                                        CreatedAt = now,
-                                        FirstName = data.FirstName,
-                                        LastName = data.LastName,
-                                        UserTitleID = title.ID,
-                                        CompanyID = company.ID,
-                                        KitchenID = kitchen.ID,
-                                        Guid = Guid.NewGuid(),
-                                        Email = data.Email,
-                                        PassWord = EncryptionHelper.Encrypt(data.PassWord, data.Email)
-                                    };
+                            string generatedPassWord = EncryptionHelper.GeneratePassword(12, (new Random()).Next(2, 6));
 
-                                    _db.Add(user);
-                                    await _db.SaveChangesAsync();
-                                    dbContextTransaction.Commit();
-                                    return RedirectToAction(nameof(Index));
-                                }
-                                else
+                        if (user == null)
+                        {
+                            if ((data.PassWord).Equals(data.PassWordRepeat))
+                            {
+                                user = new User()
                                 {
-                                    ModelState.AddModelError("", "Passwords did not match");
-                                }
+                                    Admin = true,
+                                    CreatedAt = now,
+                                    FirstName = data.FirstName,
+                                    LastName = data.LastName,
+                                    UserTitleID = title.ID,
+                                    CompanyID = company.ID,
+                                    KitchenID = kitchen.ID,
+                                    Guid = Guid.NewGuid(),
+                                    Email = data.Email,
+                                    PassWord = EncryptionHelper.Encrypt(generatedPassWord, data.Email)
+                                };
+
+                                _db.Add(user);
+                                await _db.SaveChangesAsync();
+                                dbContextTransaction.Commit();
+                                return RedirectToAction(nameof(Index));
                             }
                             else
                             {
-                                ModelState.AddModelError("", "Email already registered");
+                                ModelState.AddModelError("", "Passwords did not match");
                             }
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Company Already Exists");
+                            ModelState.AddModelError("", "Email already registered");
                         }
+
+                        MailHelper.SendRegisterEmail(data.Email, generatedPassWord, data.FirstName + " " + data.LastName);
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", "Company Already Exists");
+                    }
+                }
                 }
                 catch (Exception e)
                 {
                     ModelState.AddModelError("", "Unable to save changes. " +
                                 "Try again, and if the problem persists " +
-                                "see your system administrator.");
+                                "see your system administrator. " + e);
                 }
 
                 dbContextTransaction.Rollback();

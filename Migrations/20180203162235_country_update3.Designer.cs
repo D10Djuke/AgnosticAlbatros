@@ -11,9 +11,10 @@ using System;
 namespace AgnosticAlbatros.Migrations
 {
     [DbContext(typeof(DeliContext))]
-    partial class DeliContextModelSnapshot : ModelSnapshot
+    [Migration("20180203162235_country_update3")]
+    partial class country_update3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
