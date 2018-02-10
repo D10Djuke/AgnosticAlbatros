@@ -35,19 +35,26 @@ namespace AgnosticAlbatros.Controllers
                 if (ModelState.IsValid)
                 {
                     User u = _db.Users.FirstOrDefault(x => x.Email == data.Email);
-                    
-                    if(u != null && (EncryptionHelper.Decrypt(u.PassWord, u.Email)).Equals(data.PassWord))
+
+                    if (u != null)
                     {
-                        u.LastSeen = DateTime.UtcNow;
-                        await _db.SaveChangesAsync();
+                        if ((EncryptionHelper.Decrypt(u.PassWord, u.Email)).Equals(data.PassWord))
+                        {
+                            u.LastSeen = DateTime.UtcNow;
+                            await _db.SaveChangesAsync();
 
-                        _userService.User = u;
+                            _userService.User = u;
 
-                        return RedirectToAction("Index", u.Admin ? "Orders" : "Planning");
+                            return RedirectToAction("Index", u.Admin ? "Orders" : "Planning");
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Email en wachtwoordkomen niet overeen.");
+                        }
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Password and username did not match");
+                        ModelState.AddModelError("", "Email is niet geassocieerd met een Deligate-account.");
                     }
                 }
             }
@@ -55,13 +62,13 @@ namespace AgnosticAlbatros.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes. " +
                             "Try again, and if the problem persists " +
-                            "see your system administrator.");
+                            "see your system administrator. " + e);
             }
 
             return View("Index", data);
         }
 
-        public  IActionResult RedirectRegister()
+        public IActionResult Register()
         {
             RegisterData data = new RegisterData()
             {
@@ -71,7 +78,12 @@ namespace AgnosticAlbatros.Controllers
             return View("Register", data);
         }
 
-        public async Task<IActionResult> Register([Bind("Email,FirstName,LastName,CompanyName,Country,ZipCode,City")]RegisterData data)
+        public IActionResult About()
+        {
+            return View("About");
+        }
+
+        public async Task<IActionResult> RegisterForm([Bind("Email,FirstName,LastName,CompanyName,Country,ZipCode,City")]RegisterData data)
         {
             using (var dbContextTransaction = _db.Database.BeginTransaction())
             {
@@ -136,46 +148,46 @@ namespace AgnosticAlbatros.Controllers
 
                             string generatedPassWord = EncryptionHelper.GeneratePassword(12, (new Random()).Next(2, 6));
 
-                        if (user == null)
-                        {
-                            if ((data.PassWord).Equals(data.PassWordRepeat))
+                            if (user == null)
                             {
-                                user = new User()
+                                if ((data.PassWord).Equals(data.PassWordRepeat))
                                 {
-                                    Admin = true,
-                                    CreatedAt = now,
-                                    FirstName = data.FirstName,
-                                    LastName = data.LastName,
-                                    UserTitleID = title.ID,
-                                    CompanyID = company.ID,
-                                    KitchenID = kitchen.ID,
-                                    Guid = Guid.NewGuid(),
-                                    Email = data.Email,
-                                    PassWord = EncryptionHelper.Encrypt(generatedPassWord, data.Email)
-                                };
+                                    user = new User()
+                                    {
+                                        Admin = true,
+                                        CreatedAt = now,
+                                        FirstName = data.FirstName,
+                                        LastName = data.LastName,
+                                        UserTitleID = title.ID,
+                                        CompanyID = company.ID,
+                                        KitchenID = kitchen.ID,
+                                        Guid = Guid.NewGuid(),
+                                        Email = data.Email,
+                                        PassWord = EncryptionHelper.Encrypt(generatedPassWord, data.Email)
+                                    };
 
-                                _db.Add(user);
-                                await _db.SaveChangesAsync();
-                                dbContextTransaction.Commit();
-                                return RedirectToAction(nameof(Index));
+                                    _db.Add(user);
+                                    await _db.SaveChangesAsync();
+                                    dbContextTransaction.Commit();
+                                    return RedirectToAction(nameof(Index));
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "Passwords did not match");
+                                }
                             }
                             else
                             {
-                                ModelState.AddModelError("", "Passwords did not match");
+                                ModelState.AddModelError("", "Email already registered");
                             }
+
+                            MailHelper.SendRegisterEmail(data.Email, generatedPassWord, data.FirstName + " " + data.LastName);
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Email already registered");
+                            ModelState.AddModelError("", "Company Already Exists");
                         }
-
-                        MailHelper.SendRegisterEmail(data.Email, generatedPassWord, data.FirstName + " " + data.LastName);
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Company Already Exists");
-                    }
-                }
                 }
                 catch (Exception e)
                 {

@@ -43,7 +43,7 @@ namespace AgnosticAlbatros.Helpers
                 smtpClient.Port = MailValues.Port;
                 smtpClient.Host = MailValues.Host;
 
-                smtpClient.Credentials = new NetworkCredential(MailValues.HostEmail, EncryptionHelper.Decrypt(Encrypted.enc_p1, MailValues.HostEmail));
+                smtpClient.Credentials = new NetworkCredential(MailValues.HostEmail, EncryptionHelper.Decrypt(Encrypted.enc_hostemailpass, MailValues.HostEmail));
                 smtpClient.Send(mailMessage);
             }
 

@@ -19,7 +19,7 @@ namespace AgnosticAlbatros
 
         public partial class Encrypted
         {
-            public static readonly string enc_p1 = "wWpjoMK8+9Ly31mv7JZqIGHswwB0Lf7hpRUlRQCgZcTzd4ZItZy9qIUoWdkgayQnWXyIcUh+WdH58VBScDMSqtA23dlFSl1QDXpxmN4gUFDzOSUw2i2CgboSKIb4dg9r";
+            public static readonly string enc_hostemailpass = "wWpjoMK8+9Ly31mv7JZqIGHswwB0Lf7hpRUlRQCgZcTzd4ZItZy9qIUoWdkgayQnWXyIcUh+WdH58VBScDMSqtA23dlFSl1QDXpxmN4gUFDzOSUw2i2CgboSKIb4dg9r";
         }
 
         public partial class MailValues

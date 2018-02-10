@@ -92,7 +92,7 @@ namespace AgnosticAlbatros.Controllers
 
                         User user = new User()
                         {
-                            Admin = false,
+                            Admin = false, 
                             CreatedAt = DateTime.UtcNow,
                             FirstName = data.FirstName,
                             LastName = data.LastName,
@@ -114,7 +114,7 @@ namespace AgnosticAlbatros.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes. " +
                             "Try again, and if the problem persists " +
-                            "see your system administrator.");
+                            "see your system administrator. " + e);
             }
 
             data.Kitchens = _db.Kitchens.Where(x => x.CompanyID == _userService.User.CompanyID);

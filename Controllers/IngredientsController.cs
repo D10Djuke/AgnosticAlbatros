@@ -71,7 +71,7 @@ namespace AgnosticAlbatros.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes. " +
                             "Try again, and if the problem persists " +
-                            "see your system administrator.");
+                            "see your system administrator. " + e);
             }
 
             IngredientsData data = new IngredientsData()
