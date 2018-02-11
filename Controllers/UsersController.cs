@@ -39,6 +39,7 @@ namespace AgnosticAlbatros.Controllers
             return View(vm);
         }
 
+        [HttpPost]
         public IActionResult Create()
         {
             UserData data = new UserData()

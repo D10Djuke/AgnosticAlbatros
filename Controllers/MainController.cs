@@ -49,7 +49,7 @@ namespace AgnosticAlbatros.Controllers
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Email en wachtwoordkomen niet overeen.");
+                            ModelState.AddModelError("", "Email en wachtwoord komen niet overeen.");
                         }
                     }
                     else
@@ -60,9 +60,9 @@ namespace AgnosticAlbatros.Controllers
             }
             catch (Exception e)
             {
-                ModelState.AddModelError("", "Unable to save changes. " +
-                            "Try again, and if the problem persists " +
-                            "see your system administrator. " + e);
+                ModelState.AddModelError("", "Kan wijzigingen niet opslaan. " +
+                                    "Probeer het opnieuw en als het probleem zich blijft voordoen" +
+                                    "raadpleeg uw systeembeheerder. ");
             }
 
             return View("Index", data);
@@ -150,50 +150,46 @@ namespace AgnosticAlbatros.Controllers
 
                             if (user == null)
                             {
-                                if ((data.PassWord).Equals(data.PassWordRepeat))
+                                user = new User()
                                 {
-                                    user = new User()
-                                    {
-                                        Admin = true,
-                                        CreatedAt = now,
-                                        FirstName = data.FirstName,
-                                        LastName = data.LastName,
-                                        UserTitleID = title.ID,
-                                        CompanyID = company.ID,
-                                        KitchenID = kitchen.ID,
-                                        Guid = Guid.NewGuid(),
-                                        Email = data.Email,
-                                        PassWord = EncryptionHelper.Encrypt(generatedPassWord, data.Email)
-                                    };
+                                    Admin = true,
+                                    CreatedAt = now,
+                                    FirstName = data.FirstName,
+                                    LastName = data.LastName,
+                                    UserTitleID = title.ID,
+                                    CompanyID = company.ID,
+                                    KitchenID = kitchen.ID,
+                                    Guid = Guid.NewGuid(),
+                                    Email = data.Email,
+                                    PassWord = EncryptionHelper.Encrypt(generatedPassWord, data.Email)
+                                };
 
-                                    _db.Add(user);
-                                    await _db.SaveChangesAsync();
-                                    dbContextTransaction.Commit();
-                                    return RedirectToAction(nameof(Index));
-                                }
-                                else
-                                {
-                                    ModelState.AddModelError("", "Passwords did not match");
-                                }
+                                _db.Add(user);
+                                await _db.SaveChangesAsync();
+                                dbContextTransaction.Commit();
+
+                                MailHelper.SendRegisterEmail(data.Email, generatedPassWord, data.FirstName + " " + data.LastName);
+
+                                _userService.User = user;
+
+                                return RedirectToAction("Index", "Orders");
                             }
                             else
                             {
-                                ModelState.AddModelError("", "Email already registered");
+                                ModelState.AddModelError("", "Er is al een account geregistreerd met deze email.");
                             }
-
-                            MailHelper.SendRegisterEmail(data.Email, generatedPassWord, data.FirstName + " " + data.LastName);
                         }
                         else
                         {
-                            ModelState.AddModelError("", "Company Already Exists");
+                            ModelState.AddModelError("", "Er is al een bedrijf geregistreerd met deze naam.");
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                                "Try again, and if the problem persists " +
-                                "see your system administrator. " + e);
+                    ModelState.AddModelError("", "Kan wijzigingen niet opslaan. " +
+                                    "Probeer het opnieuw en als het probleem zich blijft voordoen" +
+                                    "raadpleeg uw systeembeheerder. ");
                 }
 
                 dbContextTransaction.Rollback();
